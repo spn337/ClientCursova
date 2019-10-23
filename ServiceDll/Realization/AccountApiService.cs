@@ -60,14 +60,14 @@ namespace ServiceDll.Realization
 
                 foreach (var item in tokenJwtSec.Claims)
                 {
-                    if(item.Type != "Id" && item.Type != "exp")
+                    if (item.Type != "Id" && item.Type != "exp")
                         user.Add(item.Type, item.Value);
                 }
                 return user;
             }
             catch (Exception ex)
             {
-               // MessageBox.Show("Exception", ex.Message);
+                // MessageBox.Show("Exception", ex.Message);
             }
 
             return null;
@@ -75,6 +75,42 @@ namespace ServiceDll.Realization
         public Task<Dictionary<string, string>> LoginAsync(AccountModel model)
         {
             return Task.Run(() => Login(model));
+        }
+
+        public bool Logout(string userEmail)
+        {
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(_url + "/logout"));
+            // тип відправлення
+            http.Accept = "application/json";
+            // тип прийому
+            http.ContentType = "application/json";
+            // тип запиту на сервер
+            http.Method = "POST";
+
+            // посилаємо запит
+            string parsedContent = JsonConvert.SerializeObject(userEmail);
+            UTF8Encoding encoding = new UTF8Encoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+
+            try
+            {
+                var response = http.GetResponse();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public Task<bool> LogoutAsync(string userEmail)
+        {
+            return Task.Run(() => Logout(userEmail));
         }
 
         public Dictionary<string, string> Registration(UserModel model)

@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClientCursova"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Store" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="62*"></RowDefinition>
+            <RowDefinition Height="38*"></RowDefinition>
+            <RowDefinition Height="269*"></RowDefinition>
+            <RowDefinition Height="50*"></RowDefinition>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"></ColumnDefinition>
+            <ColumnDefinition Width="75*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label x:Name ="lblUser" Grid.Row ="0" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Height="60" Width="130"/>
+        <Button  x:Name ="btnLogout" Content="Log out"  Grid.Row ="3" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Width="85" Height="30" Click="BtnLogout_Click"/>
+
     </Grid>
 </Window>

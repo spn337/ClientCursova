@@ -8,6 +8,10 @@ namespace ServiceDll.Interfaces
     {
         Dictionary<string, string> Login(AccountModel model);
         Task<Dictionary<string, string>> LoginAsync(AccountModel model);
+
+        bool Logout(string userEmail);
+        Task<bool> LogoutAsync(string userEmail);
+
         Dictionary<string, string> Registration(UserModel model);
         Task<Dictionary<string, string>> RegistrationAsync(UserModel model);
     }
