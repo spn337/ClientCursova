@@ -1,19 +1,23 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ServiceDll.Interfaces;
 using ServiceDll.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ServiceDll.Realization
 {
     public class AccountApiService : IAccountService
     {
         private readonly string _url = "https://localhost:44329/api/account";
-        public UserModel Login(AccountModel model)
+        public Dictionary<string, string> Login(AccountModel model)
         {
             var http = (HttpWebRequest)WebRequest.Create(new Uri(_url + "/login"));
             // тип відправлення
@@ -33,7 +37,6 @@ namespace ServiceDll.Realization
             newStream.Close();
 
             // отримаємо відповідь
-            string content = "";
             UserModel newUser = new UserModel();
 
             try
@@ -42,39 +45,39 @@ namespace ServiceDll.Realization
 
                 var stream = response.GetResponseStream();
                 var sr = new StreamReader(stream);
-                content = sr.ReadToEnd();
+                string content = sr.ReadToEnd();
                 var anon = new
                 {
-                    value = String.Empty
+                    token = String.Empty
                 };
                 var tokenObj = JsonConvert.DeserializeAnonymousType(content, anon);
 
-                //var jwtHandler = new JwtSecurityTokenHandler();
+                var tokenStr = tokenObj.token;
+                var handler = new JwtSecurityTokenHandler();
+                var tokenJwtSec = handler.ReadToken(tokenStr) as JwtSecurityToken;
 
-                //var token = jwtHandler.ReadJwtToken(tokenObj.value);
+                Dictionary<string, string> user = new Dictionary<string, string>();
 
-                //var jwtHeader = JsonConvert.SerializeObject(token.Header.Select(h => new { h.Key, h.Value }));
-                //var jwtOutput = $"{{\r\n\"Header\":\r\n{JToken.Parse(jwtHeader)},";
-
-                //var jwtPayload = JsonConvert.SerializeObject(token.Claims.Select(c => new { c.Type, c.Value }));
-                //jwtOutput += $"\r\n\"Payload\":\r\n{JToken.Parse(jwtPayload)}\r\n}}";
+                foreach (var item in tokenJwtSec.Claims)
+                {
+                    if(item.Type != "Id" && item.Type != "exp")
+                        user.Add(item.Type, item.Value);
+                }
+                return user;
             }
             catch (Exception ex)
             {
-                if (ex.Message == "The remote server returned an error: (400) Bad Request.")
-                {
-                    return null;
-                }
+               // MessageBox.Show("Exception", ex.Message);
             }
 
-            return newUser;
+            return null;
         }
-        public Task<UserModel> LoginAsync(AccountModel model)
+        public Task<Dictionary<string, string>> LoginAsync(AccountModel model)
         {
             return Task.Run(() => Login(model));
         }
 
-        public List<string> Registration(UserModel model)
+        public Dictionary<string, string> Registration(UserModel model)
         {
             var http = (HttpWebRequest)WebRequest.Create(new Uri(_url + "/registration"));
             // тип відправлення
@@ -93,24 +96,13 @@ namespace ServiceDll.Realization
             newStream.Write(bytes, 0, bytes.Length);
             newStream.Close();
 
-            // отримаємо відповідь
-            string content = "";
-
             try
             {
                 var response = http.GetResponse();
-
-                var stream = response.GetResponseStream();
-                var sr = new StreamReader(stream);
-                content = sr.ReadToEnd();
-                var anon = new
-                {
-                    token = String.Empty
-                };
-                var tokenObj = JsonConvert.DeserializeAnonymousType(content, anon);
             }
             catch (WebException ex)
             {
+                // Помилки при валідації даних
                 using (var stream = ex.Response.GetResponseStream())
                 {
                     if (ex.Response != null)
@@ -120,7 +112,7 @@ namespace ServiceDll.Realization
                             using (var reader = new StreamReader(errorResponse.GetResponseStream()))
                             {
                                 string errorsString = reader.ReadToEnd();
-                                var errorsObj = JsonConvert.DeserializeObject<List<string>>(errorsString);
+                                var errorsObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(errorsString);
 
                                 return errorsObj;
                             }
@@ -132,7 +124,7 @@ namespace ServiceDll.Realization
             return null;
         }
 
-        public Task<List<string>> RegistrationAsync(UserModel model)
+        public Task<Dictionary<string, string>> RegistrationAsync(UserModel model)
         {
             return Task.Run(() => Registration(model));
         }

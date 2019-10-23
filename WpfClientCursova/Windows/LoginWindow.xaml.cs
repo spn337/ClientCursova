@@ -37,7 +37,7 @@ namespace WpfClientCursova.Windows
                 }
                 else
                 {
-                    MainWindow window = new MainWindow();
+                    MainWindow window = new MainWindow(responseObj);
                     window.Show();
                     this.Close();
                 }

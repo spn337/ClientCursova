@@ -3,6 +3,7 @@ using ServiceDll.Realization;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace WpfClientCursova.Windows
@@ -16,26 +17,32 @@ namespace WpfClientCursova.Windows
         {
             InitializeComponent();
         }
-
         private async void BtnSend_Click(object sender, RoutedEventArgs e)
         {
-            tbWarning.Text = "";
+            tbWarningFirstName.Text = "";
+            tbWarningLastName.Text = "";
+            tbWarningPassword.Text = "";
+            tbWarningConfirmPassword.Text = "";
+            tbWarningEmail.Text = "";
+            tbWarningPhone.Text = "";
 
             if (tbPassword.Password != tbConfirmPassword.Password)
             {
-                tbWarning.Text = "Пароль не співпадає";
+                tbWarningPassword.Text = "Пароль не співпадає";
+                tbWarningConfirmPassword.Text = "Пароль не співпадає";
                 return;
             }
             if (tbFirstName.Text == tbLastName.Text && tbFirstName.Text != "")
             {
-                tbWarning.Text = "Поле FirstName та LastName не можуть співпадати";
+                tbWarningFirstName.Text = "Поле FirstName та LastName не можуть співпадати";
+                tbWarningLastName.Text = "Поле FirstName та LastName не можуть співпадати";
                 return;
             }
 
             // відправляємо модель на сервер
             AccountApiService service = new AccountApiService();
 
-            var response = await service.RegistrationAsync(new UserModel
+            var errorList = await service.RegistrationAsync(new UserModel
             {
                 FirstName = tbFirstName.Text,
                 LastName = tbLastName.Text,
@@ -45,20 +52,33 @@ namespace WpfClientCursova.Windows
             });
 
             // витягуємо помилки, якщо поля невалідні
-            if (response != null)
+            if (errorList != null)
             {
-                string message = "";
-                for (int i = 0; i < response.Count; i++)
+                foreach (var item in errorList)
                 {
-                    message += response[i] += "\n";
+                    if ("firstName" == item.Key)
+                        tbWarningFirstName.Text = item.Value;
+
+                    if ("lastName" == item.Key)
+                        tbWarningLastName.Text = item.Value;
+
+                    if ("password" == item.Key)
+                        tbWarningPassword.Text = item.Value;
+
+                    if("email" == item.Key)
+                        tbWarningEmail.Text = item.Value;
+
+                    if("phone" == item.Key)
+                        tbWarningPhone.Text = item.Value;
                 }
-                tbWarning.Text = message;
+
+
             }
             // в іншому випадку реєстрація успішна
             else
             {
-                tbWarning.Foreground = Brushes.Blue;
-                tbWarning.Text = "Реєстрація успішна";
+                tbWarningPhone.Foreground = Brushes.Blue;
+                tbWarningPhone.Text = "Реєстрація успішна";
 
                 btnSend.IsEnabled = false;
             }

@@ -6,9 +6,9 @@ namespace ServiceDll.Interfaces
 {
     interface IAccountService
     {
-        UserModel Login(AccountModel model);
-        Task<UserModel> LoginAsync(AccountModel model);
-        List<string> Registration(UserModel model);
-        Task<List<string>> RegistrationAsync(UserModel model);
+        Dictionary<string, string> Login(AccountModel model);
+        Task<Dictionary<string, string>> LoginAsync(AccountModel model);
+        Dictionary<string, string> Registration(UserModel model);
+        Task<Dictionary<string, string>> RegistrationAsync(UserModel model);
     }
 }
