@@ -1,16 +1,13 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ServiceDll.Interfaces;
 using ServiceDll.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace ServiceDll.Realization
 {
@@ -65,7 +62,7 @@ namespace ServiceDll.Realization
                 }
                 return user;
             }
-            catch (Exception ex)
+            catch
             {
                 // MessageBox.Show("Exception", ex.Message);
             }
