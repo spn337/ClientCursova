@@ -16,7 +16,7 @@ namespace WpfClientCursova
     public partial class MainWindow : Window
     {
         public string userEmail;
-        public ObservableCollection<ProductVM> products = new ObservableCollection<ProductVM>();
+        public ObservableCollection<ProductVM> Products = new ObservableCollection<ProductVM>();
 
         public MainWindow(Dictionary<string, string> responseObj)
         {
@@ -28,12 +28,14 @@ namespace WpfClientCursova
             lblUser.Content += responseObj["FirstName"] + " " + responseObj["LastName"] + "\n";
             lblUser.Content += responseObj["Phone"];
 
+            lbxProducts.ItemsSource = Products;
+
             UpdateDatabase();
         }
 
         private async void UpdateDatabase()
         {
-            products.Clear();
+            Products.Clear();
             ProductApiService service = new ProductApiService();
             var list = await service.GetProductsAsync();
             foreach (var item in list)
@@ -45,35 +47,7 @@ namespace WpfClientCursova
                     Price = item.Price,
                     PhotoPath = item.PhotoPath
                 };
-                products.Add(newProduct);
-            }
-
-            lbxProducts.Items.Clear();
-
-            foreach (var item in products)
-            {
-                StackPanel sp = new StackPanel();
-
-                TextBlock tbName = new TextBlock();
-                tbName.Text = item.Name;
-                TextBlock tbPrice = new TextBlock();
-                tbPrice.Text = item.Price.ToString();
-
-                System.Windows.Controls.Image imgPhoto = new Image();
-                if (item.PhotoPath != null)
-                {
-                    Uri uri = new Uri(item.PhotoPath);
-                    imgPhoto.Source = new BitmapImage(uri);
-                }
-
-                sp.Children.Add(imgPhoto);
-                sp.Children.Add(tbName);
-                sp.Children.Add(tbPrice);
-
-                ListBoxItem lbxItem = new ListBoxItem();
-                lbxItem.Content = sp;
-
-                lbxProducts.Items.Add(lbxItem);
+                Products.Add(newProduct);
             }
         }
 
