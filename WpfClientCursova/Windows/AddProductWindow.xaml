@@ -21,10 +21,14 @@
                 <TextBlock HorizontalAlignment="Left" Margin="20,12,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
                 <TextBox x:Name ="tbName" HorizontalAlignment="Left" Height="23" Margin="50,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
             </StackPanel>
+            <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningName"
+                       HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
             <StackPanel Orientation="Horizontal"  Margin="0,40,0,0">
                 <TextBlock HorizontalAlignment="Left" Margin="20,12,0,0" TextWrapping="Wrap" Text="Price:" VerticalAlignment="Top"/>
                 <TextBox x:Name ="tbPrice" HorizontalAlignment="Left" Height="23" Margin="59,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
             </StackPanel>
+            <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningPrice"
+                       HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
         </StackPanel>
 
         <StackPanel  Grid.Column="1" Grid.Row="0" >

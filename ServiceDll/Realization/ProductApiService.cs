@@ -14,12 +14,14 @@ namespace ServiceDll.Realization
 {
     public class ProductApiService : IProductService
     {
-        private string _url = "https://localhost:44329/api/product";
+        private readonly string _url = "https://localhost:44329/api/product";
         public List<ProductModel> GetProducts()
         {
             //Клієнт посилає запити на API
-            WebClient client = new WebClient();
-            client.Encoding = Encoding.UTF8;
+            WebClient client = new WebClient
+            {
+                Encoding = Encoding.UTF8
+            };
 
             //витягуємо дані з сервера по URL
             string data = client.DownloadString(_url);
@@ -34,7 +36,7 @@ namespace ServiceDll.Realization
         }
 
 
-        public int Create(ProductAddModel product)
+        public Dictionary<string, string> Create(ProductAddModel product)
         {
             var http = (HttpWebRequest)WebRequest.Create(new Uri(_url));
             // тип відправлення
@@ -54,15 +56,34 @@ namespace ServiceDll.Realization
             newStream.Close();
 
             // отримаємо відповідь
-            var response = http.GetResponse();
+            try
+            {
+                var response = http.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                // Помилки при валідації даних
+                using (var stream = ex.Response.GetResponseStream())
+                {
+                    if (ex.Response != null)
+                    {
+                        using (var errorResponse = (HttpWebResponse)ex.Response)
+                        {
+                            using (var reader = new StreamReader(errorResponse.GetResponseStream()))
+                            {
+                                string errorsString = reader.ReadToEnd();
+                                var errorsObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(errorsString);
 
-            var stream = response.GetResponseStream();
-            var sr = new StreamReader(stream);
-            var content = sr.ReadToEnd();
+                                return errorsObj;
+                            }
+                        }
+                    }
+                }
+            }
 
-            return 0;
+            return null;
         }    
-        public Task<int> CreateAsync(ProductAddModel product)
+        public Task<Dictionary<string, string>> CreateAsync(ProductAddModel product)
         {
             return Task.Run(() => Create(product));
         }

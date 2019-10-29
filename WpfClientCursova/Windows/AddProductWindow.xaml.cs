@@ -2,6 +2,7 @@
 using ServiceDll.Helpers;
 using ServiceDll.Realization;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -44,15 +45,43 @@ namespace WpfClientCursova.Windows
         }
         private async void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (tbName.Text != "" && tbPrice.Text != "")
+            tbWarningName.Text = "";
+            tbWarningPrice.Text = "";
+
+            Dictionary<string, string> errorList = new Dictionary<string, string>();
+
+            ProductApiService service = new ProductApiService();
+
+            try
             {
-                ProductApiService service = new ProductApiService();
-                var id = await service.CreateAsync(new ServiceDll.Models.ProductAddModel
+                errorList = await service.CreateAsync(new ServiceDll.Models.ProductAddModel
                 {
                     Name = tbName.Text,
                     Price = Convert.ToDecimal(tbPrice.Text),
                     Photo = base64Image
                 });
+
+                // витягуємо помилки, якщо поля невалідні
+                if (errorList != null)
+                {
+                    foreach (var item in errorList)
+                    {
+                        if ("name" == item.Key)
+                            tbWarningName.Text = item.Value;
+
+                        if ("price" == item.Key)
+                            tbWarningPrice.Text = item.Value;
+                    }
+                }
+                // в іншому випадку - успішно
+                else
+                {
+                    this.Close();
+                }
+            }
+            catch
+            {
+                tbWarningPrice.Text = "Неправильне число";
             }
         }
     }
