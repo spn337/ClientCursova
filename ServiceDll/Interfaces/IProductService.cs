@@ -12,5 +12,8 @@ namespace ServiceDll.Interfaces
 
         Dictionary<string, string> Create(ProductAddModel product);
         Task<Dictionary<string, string>> CreateAsync(ProductAddModel product);
+
+        int Delete(ProductDeleteModel product);
+        Task<int> DeleteAsync(ProductDeleteModel product);
     }
 }

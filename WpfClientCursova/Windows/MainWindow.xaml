@@ -30,7 +30,7 @@
 
         <StackPanel Orientation="Horizontal" Margin="0,0,135,10"  VerticalAlignment="Bottom"  Grid.Row ="0" Grid.Column="1" Height="30">
             <Button x:Name ="btnCreate" Content ="Create" Margin="5,0,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="100" Height="30" Click="BtnCreate_Click"/>
-            <Button x:Name ="btnDelete" Content ="Delete" Margin="10,0,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="100" Height="30"/>
+            <Button x:Name ="btnDelete" Content ="Delete" Margin="10,0,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="100" Height="30" Click="BtnDelete_Click"/>
             <Button x:Name ="btnUpdate" Content ="Update" Margin="10,0,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="100" Height="30"/>
         </StackPanel>
 

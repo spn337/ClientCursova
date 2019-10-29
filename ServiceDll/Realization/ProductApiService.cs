@@ -87,5 +87,39 @@ namespace ServiceDll.Realization
         {
             return Task.Run(() => Create(product));
         }
+
+
+        public int Delete(ProductDeleteModel product)
+        {
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(_url));
+            // тип відправлення
+            http.Accept = "application/json";
+            // тип прийому
+            http.ContentType = "application/json";
+            // тип запиту на сервер
+            http.Method = "DELETE";
+
+            // посилаємо запит
+            string parsedContent = JsonConvert.SerializeObject(product);
+            UTF8Encoding encoding = new UTF8Encoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+
+            // отримаємо відповідь
+            var response = http.GetResponse();
+
+            var stream = response.GetResponseStream();
+            var sr = new StreamReader(stream);
+            var content = sr.ReadToEnd();
+
+            return 0;
+        }
+        public Task<int> DeleteAsync(ProductDeleteModel product)
+        {
+            return Task.Run(() => Delete(product));
+        }
     }
 }

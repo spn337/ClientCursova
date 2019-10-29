@@ -63,9 +63,7 @@ namespace ServiceDll.Realization
                 return user;
             }
             catch
-            {
-                // MessageBox.Show("Exception", ex.Message);
-            }
+            {}
 
             return null;
         }

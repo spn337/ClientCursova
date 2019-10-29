@@ -1,4 +1,5 @@
-﻿using ServiceDll.Realization;
+﻿using ServiceDll.Models;
+using ServiceDll.Realization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -45,7 +46,7 @@ namespace WpfClientCursova
                     Id = item.Id,
                     Name = item.Name,
                     Price = item.Price,
-                    PhotoPath = item.PhotoPath
+                    PhotoPath = "https://localhost:44329/images/" + item.PhotoName
                 };
                 Products.Add(newProduct);
             }
@@ -59,6 +60,27 @@ namespace WpfClientCursova
 
             UpdateDatabase();
         }
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = lbxProducts.SelectedItem as ProductVM;
+            if (selectedItem != null)
+            {
+                if (MessageBox.Show("Видалити продукт " + selectedItem.Name + "?", "Видалення",
+                    MessageBoxButton.YesNo)
+                    == MessageBoxResult.Yes)
+                {
+                    ProductApiService service = new ProductApiService();
+                    service.Delete(new ProductDeleteModel
+                    {
+                        Id = selectedItem.Id
+                    });
+                }
+
+                UpdateDatabase();
+            }        
+        }
+
+
         private async void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             AccountApiService service = new AccountApiService();
@@ -70,5 +92,7 @@ namespace WpfClientCursova
                 this.Close();
             }
         }
+
+        
     }
 }
