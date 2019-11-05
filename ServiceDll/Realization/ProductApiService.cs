@@ -12,6 +12,7 @@ using ServiceDll.Models;
 
 namespace ServiceDll.Realization
 {
+     
     public class ProductApiService : IProductService
     {
         private readonly string _url = "https://localhost:44329/api/product";
@@ -120,6 +121,73 @@ namespace ServiceDll.Realization
         public Task<int> DeleteAsync(ProductDeleteModel product)
         {
             return Task.Run(() => Delete(product));
+        }
+
+        public ProductEditModel EditGetById(int id)
+        {
+            //Клієнт посилає запити на API
+            WebClient client = new WebClient
+            {
+                Encoding = Encoding.UTF8
+            };
+            //витягуємо дані з сервера по URL
+            string data = client.DownloadString($"{_url}/{id}");
+            // перетворюємо string в object за допомогою json
+            var p = JsonConvert.DeserializeObject<ProductEditModel>(data);
+            return p;
+        }
+
+        public Dictionary<string, string> EditSave(ProductEditModel product)
+        {
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(_url));
+            // тип відправлення
+            http.Accept = "application/json";
+            // тип прийому
+            http.ContentType = "application/json";
+            // тип запиту на сервер
+            http.Method = "PUT";
+
+            // посилаємо запит
+            string parsedContent = JsonConvert.SerializeObject(product);
+            UTF8Encoding encoding = new UTF8Encoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent);
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+
+            // отримаємо відповідь
+            try
+            {
+                var response = http.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                // Помилки при валідації даних
+                using (var stream = ex.Response.GetResponseStream())
+                {
+                    if (ex.Response != null)
+                    {
+                        using (var errorResponse = (HttpWebResponse)ex.Response)
+                        {
+                            using (var reader = new StreamReader(errorResponse.GetResponseStream()))
+                            {
+                                string errorsString = reader.ReadToEnd();
+                                var errorsObj = JsonConvert.DeserializeObject<Dictionary<string, string>>(errorsString);
+
+                                return errorsObj;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public Task<Dictionary<string, string>> EditSaveAsync(ProductEditModel product)
+        {
+            return Task.Run(() => EditSave(product));
         }
     }
 }

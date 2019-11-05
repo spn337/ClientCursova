@@ -15,5 +15,9 @@ namespace ServiceDll.Interfaces
 
         int Delete(ProductDeleteModel product);
         Task<int> DeleteAsync(ProductDeleteModel product);
+
+        ProductEditModel EditGetById(int id);
+        Dictionary<string, string> EditSave(ProductEditModel model);
+        Task<Dictionary<string, string>> EditSaveAsync(ProductEditModel product);
     }
 }

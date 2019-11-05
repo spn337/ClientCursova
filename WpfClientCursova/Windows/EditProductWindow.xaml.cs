@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 using ServiceDll.Helpers;
+using ServiceDll.Models;
 using ServiceDll.Realization;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -10,12 +12,14 @@ using System.Windows.Media.Imaging;
 namespace WpfClientCursova.Windows
 {
     /// <summary>
-    /// Interaction logic for AddProductWindow.xaml
+    /// Interaction logic for EditProduct.xaml
     /// </summary>
-    public partial class AddProductWindow : Window
+    public partial class EditProductWindow : Window
     {
+        public int IdProduct { get; set; }
+        ProductApiService service = new ProductApiService();
         string base64Image = "";
-        public AddProductWindow()
+        public EditProductWindow()
         {
             InitializeComponent();
         }
@@ -25,7 +29,7 @@ namespace WpfClientCursova.Windows
             OpenFileDialog dlg = new OpenFileDialog
             {
                 Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) " +
-               "| *.jpg; *.jpeg; *.jpe; *.jfif; *.png",
+              "| *.jpg; *.jpeg; *.jpe; *.jfif; *.png",
             };
 
             if (dlg.ShowDialog() == true)
@@ -43,19 +47,19 @@ namespace WpfClientCursova.Windows
                 }
             }
         }
-        private async void BtnAdd_Click(object sender, RoutedEventArgs e)
+
+        private async void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
             tbWarningName.Text = "";
             tbWarningPrice.Text = "";
 
             Dictionary<string, string> errorList = new Dictionary<string, string>();
 
-            ProductApiService service = new ProductApiService();
-
             try
             {
-                errorList = await service.CreateAsync(new ServiceDll.Models.ProductAddModel
+                errorList = await service.EditSaveAsync(new ProductEditModel
                 {
+                    Id = IdProduct,
                     Name = tbName.Text,
                     Price = Convert.ToDecimal(tbPrice.Text),
                     PhotoBase64 = base64Image
@@ -83,6 +87,18 @@ namespace WpfClientCursova.Windows
             {
                 tbWarningPrice.Text = "Неправильне число";
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var product = service.EditGetById(this.IdProduct);
+
+            tbName.Text = product.Name;
+            tbPrice.Text = product.Price.ToString();
+
+            string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
+            string uri = $"{hostUrl}images/{product.PhotoName}";
+            imgPhoto.Source = new BitmapImage(new Uri(uri));
         }
     }
 }

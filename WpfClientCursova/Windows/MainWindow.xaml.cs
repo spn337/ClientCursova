@@ -3,6 +3,7 @@ using ServiceDll.Realization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -41,12 +42,13 @@ namespace WpfClientCursova
             var list = await service.GetProductsAsync();
             foreach (var item in list)
             {
+                string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
                 ProductVM newProduct = new ProductVM
                 {
                     Id = item.Id,
                     Name = item.Name,
                     Price = item.Price,
-                    PhotoPath = "https://localhost:44329/images/" + item.PhotoName
+                    PhotoPath = $"{hostUrl}images/{item.PhotoName}"
                 };
                 Products.Add(newProduct);
             }
@@ -79,6 +81,20 @@ namespace WpfClientCursova
                 UpdateDatabase();
             }        
         }
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = lbxProducts.SelectedItem as ProductVM;
+            if (selectedItem != null)
+            {
+                int id = selectedItem.Id;
+                EditProductWindow dlg = new EditProductWindow();
+                dlg.IdProduct = id;
+                dlg.ShowDialog();
+
+                UpdateDatabase();
+            }
+        }
+
 
 
         private async void BtnLogout_Click(object sender, RoutedEventArgs e)
@@ -91,8 +107,6 @@ namespace WpfClientCursova
                 window.Show();
                 this.Close();
             }
-        }
-
-        
+        }       
     }
 }

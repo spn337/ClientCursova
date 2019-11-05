@@ -1,11 +1,11 @@
-﻿<Window x:Class="WpfClientCursova.Windows.AddProductWindow"
+﻿<Window x:Class="WpfClientCursova.Windows.EditProductWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClientCursova.Windows"
         mc:Ignorable="d"
-        Title="AddProductWindow" Height="450" Width="800">
+        Title="EditProductWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="136*"></ColumnDefinition>
@@ -32,9 +32,9 @@
         </StackPanel>
 
         <StackPanel  Grid.Column="1" Grid.Row="0" >
-            <Image x:Name ="imgPhoto"  Height="254" Margin="10,10,10,10"/>
+            <Image x:Name ="imgPhoto"  Height="254" Margin="10,10,10,10" Source="{Binding Path=PhotoPath}"/>
             <Button x:Name ="btnLoadPhoto" Content="Load" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Width="100" Click="BtnLoadPhoto_Click" />
         </StackPanel>
-        <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" x:Name ="btnAdd" Content="Add" HorizontalAlignment="Center"  Width="130" Click="BtnAdd_Click" Margin="0,15,0,15"/>
+        <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" x:Name ="btnAdd" Content="Edit" HorizontalAlignment="Center"  Width="130" Click="BtnEdit_Click" Margin="0,15,0,15"/>
     </Grid>
 </Window>
