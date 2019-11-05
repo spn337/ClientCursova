@@ -5,17 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClientCursova.Windows"
         mc:Ignorable="d"
-         xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         
         Title="LogoWindow"  Height="157" Width="155.5" 
-        Visibility="Visible" Background="{x:Null}" 
+        Visibility="Visible" 
         AllowsTransparency="True" WindowStyle="None">
-    
+    <Window.Background>
+        <ImageBrush/>
+    </Window.Background>
+
     <Grid Margin="0,0,0,0">
-        <!--<Image x:Name ="imgLogo" 
-               gif:ImageBehavior.RepeatBehavior="Forever"
-               gif:ImageBehavior.AnimatedSource="C:\Users\admin\Documents\Visual Studio 2017\Projects\WpfClientBegin\WpfClientBegin\Images\preloader.gif"
-               HorizontalAlignment="Left" Height="160" VerticalAlignment="Top" Width="152"  Source="/WpfClientBegin;component/Images/preloader.gif">
-        </Image>-->
+        <Image x:Name ="imgLogo"
+            gif:ImageBehavior.RepeatBehavior="Forever"
+            gif:ImageBehavior.AnimatedSource= "C:\Users\admin\Documents\Visual Studio 2017\Projects\WpfClientCursova\WpfClientCursova\Images\preloader.gif"
+            HorizontalAlignment="Left" Height="160" VerticalAlignment="Top" Width="152"  Source="C:\Users\admin\Documents\Visual Studio 2017\Projects\WpfClientCursova\WpfClientCursova\Images\preloader.gif">
+        </Image>
     </Grid>
 </Window>

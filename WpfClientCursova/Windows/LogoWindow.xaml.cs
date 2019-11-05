@@ -19,9 +19,12 @@ namespace WpfClientCursova.Windows
     /// </summary>
     public partial class LogoWindow : Window
     {
-        public LogoWindow()
+        public LogoWindow(double mainLeft, double mainTop, double mainHeight, double mainWidth)
         {
             InitializeComponent();
+
+            this.Left = mainLeft + mainWidth / 2 - this.Width / 2;
+            this.Top = mainTop + mainHeight / 2 - this.Height / 2;
         }
     }
 }

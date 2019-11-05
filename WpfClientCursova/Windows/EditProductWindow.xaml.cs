@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -24,7 +26,7 @@ namespace WpfClientCursova.Windows
             InitializeComponent();
         }
 
-        private void BtnLoadPhoto_Click(object sender, RoutedEventArgs e)
+        private async void BtnLoadPhoto_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog
             {
@@ -36,10 +38,18 @@ namespace WpfClientCursova.Windows
             {
                 try
                 {
-                    string filePath = dlg.FileName;
-                    var image = Image.FromFile(filePath);
-                    imgPhoto.Source = new BitmapImage(new Uri(filePath));
-                    base64Image = image.ConvertToBase64String();
+                    LogoWindow logo = new LogoWindow(this.Left, this.Top, this.Height, this.Width);
+                    logo.Show();
+
+                    await Task.Run(() =>
+                    {
+                        string filePath = dlg.FileName;
+                        var image = Image.FromFile(filePath);
+                        base64Image = image.ConvertToBase64String();
+                        this.Dispatcher.BeginInvoke((Action)(() => imgPhoto.Source = new BitmapImage(new Uri(filePath))));
+                    });
+
+                    logo.Close();
                 }
                 catch (Exception)
                 {
@@ -47,7 +57,6 @@ namespace WpfClientCursova.Windows
                 }
             }
         }
-
         private async void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
             tbWarningName.Text = "";
@@ -57,6 +66,10 @@ namespace WpfClientCursova.Windows
 
             try
             {
+
+                LogoWindow logo = new LogoWindow(this.Left, this.Top, this.Height, this.Width);
+                logo.Show();
+
                 errorList = await service.EditSaveAsync(new ProductEditModel
                 {
                     Id = IdProduct,
@@ -64,6 +77,8 @@ namespace WpfClientCursova.Windows
                     Price = Convert.ToDecimal(tbPrice.Text),
                     PhotoBase64 = base64Image
                 });
+
+                logo.Close();
 
                 // витягуємо помилки, якщо поля невалідні
                 if (errorList != null)

@@ -4,6 +4,7 @@ using ServiceDll.Realization;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -20,22 +21,30 @@ namespace WpfClientCursova.Windows
             InitializeComponent();
         }
 
-        private void BtnLoadPhoto_Click(object sender, RoutedEventArgs e)
+        private async void BtnLoadPhoto_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog
             {
                 Filter = "Image files (*.jpg, *.jpeg, *.jpe, *.jfif, *.png) " +
-               "| *.jpg; *.jpeg; *.jpe; *.jfif; *.png",
+              "| *.jpg; *.jpeg; *.jpe; *.jfif; *.png",
             };
 
             if (dlg.ShowDialog() == true)
             {
                 try
                 {
-                    string filePath = dlg.FileName;
-                    var image = Image.FromFile(filePath);
-                    imgPhoto.Source = new BitmapImage(new Uri(filePath));
-                    base64Image = image.ConvertToBase64String();
+                    LogoWindow logo = new LogoWindow(this.Left, this.Top, this.Height, this.Width);
+                    logo.Show();
+
+                    await Task.Run(() =>
+                    {
+                        string filePath = dlg.FileName;
+                        var image = Image.FromFile(filePath);
+                        base64Image = image.ConvertToBase64String();
+                        this.Dispatcher.BeginInvoke((Action)(() => imgPhoto.Source = new BitmapImage(new Uri(filePath))));
+                    });
+
+                    logo.Close();
                 }
                 catch (Exception)
                 {
@@ -54,12 +63,17 @@ namespace WpfClientCursova.Windows
 
             try
             {
+                LogoWindow logo = new LogoWindow(this.Left, this.Top, this.Height, this.Width);
+                logo.Show();
+
                 errorList = await service.CreateAsync(new ServiceDll.Models.ProductAddModel
                 {
                     Name = tbName.Text,
                     Price = Convert.ToDecimal(tbPrice.Text),
                     PhotoBase64 = base64Image
                 });
+
+                logo.Close();
 
                 // витягуємо помилки, якщо поля невалідні
                 if (errorList != null)
