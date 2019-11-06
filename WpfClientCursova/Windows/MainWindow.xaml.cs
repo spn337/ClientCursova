@@ -56,7 +56,7 @@ namespace WpfClientCursova
         }
         public void ShowPage(int currentPage = 1)
         {
-            int countDataInPage = 3;
+            int countDataInPage = 4;
 
             // вибираємо товари на конкретній сторінці
             var productsInPage = Products
@@ -75,9 +75,9 @@ namespace WpfClientCursova
             }
 
             // малюємо панель з кнопками
-            ShowPaginationPanel(Convert.ToInt32(countButtons), countDataInPage, currentPage);
+            ShowPaginationPanel(Convert.ToInt32(countButtons), currentPage);
         }
-        public void ShowPaginationPanel(int countButtons, int countDataInPage, int currentPage)
+        public void ShowPaginationPanel(int countButtons, int currentPage)
         {
             int lastPage = countButtons;
             int step = -4;
@@ -94,105 +94,114 @@ namespace WpfClientCursova
             //create childrens(buttons)
             for (int i = 0; i < countButtons; i++)
             {
-                Button dynamicButton = new Button();
-                ///////////////////////////////////////////////////////////
-                //if current page <= 1....7(in the left)
-                ///////////////////////////////////////////////////////////
-                if (currentPage <= countButtons / 2)
+                Button dynamicButton = CreateDynamicButton();
+
+                if (countButtons < 7)
                 {
-                    //set(...) (is almost in the end)
-                    if (i == countButtons - 2 && i != 0)
-                    {
-                        dynamicButton = CreateElipsisButton();
-                    }
-                    else
-                    {
-                        //button's numerable(1-8 ... lastPage)
-                        int number = (i != countButtons - 1) ? i + 1 : lastPage;
-                        dynamicButton = CreatePageButton(number, currentPage);
-                    }
+                    SetButtonAsPage(dynamicButton, i + 1, currentPage);
                 }
-                ///////////////////////////////////////////////////////////
-                //if current page >= 8...11(in the middle)
-                ///////////////////////////////////////////////////////////
-                else if (currentPage > countButtons / 2 && currentPage <= lastPage - countButtons / 2)
+                else
                 {
-                    //set(...) (is between numbers in the middle)
-
-                    if (i == 3 || i == countButtons - 2)
+                    ///////////////////////////////////////////////////////////
+                    //if current page <= 1....7(in the left)
+                    ///////////////////////////////////////////////////////////
+                    if (currentPage <= countButtons / 2)
                     {
-                        dynamicButton = CreateElipsisButton();
-                    }
-                    //set numbers
-                    else
-                    {
-                        int number;
-
-                        if (i < 3)
+                        //set(...) (is almost in the end)
+                        if (i == countButtons - 2 && i != 0)
                         {
-                            number = i + 1;
-                        }
-                        else if (i == countButtons - 1)
-                        {
-                            number = lastPage;
+                            SetButtonAsElipsis(dynamicButton);
                         }
                         else
                         {
-                            number = currentPage + step;
-                            step++;
+                            //button's numerable(1-8 ... lastPage)
+                            int number = (i != countButtons - 1) ? i + 1 : lastPage;
+                            SetButtonAsPage(dynamicButton, number, currentPage);
                         }
-
-                        dynamicButton = CreatePageButton(number, currentPage);
                     }
-
-                }
-
-                ///////////////////////////////////////////////////////////
-                //if current page >= 12...15(in the rigth)
-                ///////////////////////////////////////////////////////////
-                else if (currentPage >= countButtons - 3)
-                {
-                    //set(...) (is almost in the left)
-                    if (i == 3)
+                    ///////////////////////////////////////////////////////////
+                    //if current page >= 8...11(in the middle)
+                    ///////////////////////////////////////////////////////////
+                    else if (currentPage > countButtons / 2 && currentPage <= lastPage - countButtons / 2)
                     {
-                        dynamicButton = CreateElipsisButton();
+                        //set(...) (is between numbers in the middle)
+
+                        if (i == 3 || i == countButtons - 2)
+                        {
+                            SetButtonAsElipsis(dynamicButton);
+                        }
+                        //set numbers
+                        else
+                        {
+                            int number;
+
+                            if (i < 3)
+                            {
+                                number = i + 1;
+                            }
+                            else if (i == countButtons - 1)
+                            {
+                                number = lastPage;
+                            }
+                            else
+                            {
+                                number = currentPage + step;
+                                step++;
+                            }
+
+                            SetButtonAsPage(dynamicButton, number, currentPage);
+                        }
                     }
-                    //add button
-                    else
+
+                    ///////////////////////////////////////////////////////////
+                    //if current page >= 12...15(in the rigth)
+                    ///////////////////////////////////////////////////////////
+                    else if (currentPage >= countButtons - 3)
                     {
-                        //button's numerable(1 2 3 ... (lastPage - 12) - lastPage)
-                        int number = (i < 3) ? (i + 1) : (i + lastPage - countButtons + 1);
-                        dynamicButton = CreatePageButton(number, currentPage);
+                        //set(...) (is almost in the left)
+                        if (i == 3)
+                        {
+                            SetButtonAsElipsis(dynamicButton);
+                        }
+                        //add button
+                        else
+                        {
+                            //button's numerable(1 2 3 ... (lastPage - 12) - lastPage)
+                            int number = (i < 3) ? (i + 1) : (i + lastPage - countButtons + 1);
+                            SetButtonAsPage(dynamicButton, number, currentPage);
+                        }
                     }
                 }
-
-                dynamicButton.Width = 35;
-                dynamicButton.Margin = new Thickness(5, 5, 0, 0);
-                dynamicButton.HorizontalAlignment = HorizontalAlignment.Left;
-                dynamicButton.VerticalAlignment = VerticalAlignment.Stretch;
 
                 sp.Children.Add(dynamicButton);
             }
         }
-        public Button CreateElipsisButton()
+        public Button CreateDynamicButton()
         {
-            Button btn = new Button();
+            Button dynamicButton = new Button();
+
+            dynamicButton.Width = 35;
+            dynamicButton.Margin = new Thickness(5, 5, 0, 0);
+            dynamicButton.HorizontalAlignment = HorizontalAlignment.Left;
+            dynamicButton.VerticalAlignment = VerticalAlignment.Stretch;
+
+            return dynamicButton;
+        }
+        public void SetButtonAsElipsis(Button btn)
+        {
             btn.Content = "";
             btn.IsEnabled = false;
-
-            return btn;
         }
-        public Button CreatePageButton(int number, int currentPage)
+        public void SetButtonAsPage(Button btn, int number, int currentPage)
         {
+            btn.Content = number;
+
             Brush selectColor = Brushes.DarkCyan;
             Brush defaultColor = Brushes.White;
 
-            Button btn = new Button();
-            btn.Content = number.ToString();
             btn.Background = (number == currentPage) ? selectColor : defaultColor;
-            btn.Click += DynamicButton_Click;
 
-            return btn;
+            btn.Click += DynamicButton_Click;
         }
         private void DynamicButton_Click(object sender, RoutedEventArgs e)
         {
@@ -200,7 +209,6 @@ namespace WpfClientCursova
             int page = int.Parse(btn.Content.ToString());
             ShowPage(page);
         }
-
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
