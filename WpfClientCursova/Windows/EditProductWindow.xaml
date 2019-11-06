@@ -16,25 +16,26 @@
             <RowDefinition Height="64*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0" Grid.Row="0">
+        <StackPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
-                <TextBlock HorizontalAlignment="Left" Margin="20,18,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
-                <TextBox x:Name ="tbName" HorizontalAlignment="Left" Height="35" Margin="50,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+                <TextBlock Margin="20,18,0,0" TextWrapping="Wrap" Text="Name:" />
+                <TextBox x:Name ="tbName" Height="35" Margin="50,10,10,0" TextWrapping="Wrap" Width="150"/>
             </StackPanel>
             <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningName"
-                       HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
+                      Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
             <StackPanel Orientation="Horizontal"  Margin="0,40,0,0">
-                <TextBlock HorizontalAlignment="Left" Margin="20,12,0,0" TextWrapping="Wrap" Text="Price:" VerticalAlignment="Top"/>
-                <TextBox x:Name ="tbPrice" HorizontalAlignment="Left" Height="23" Margin="59,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+                <TextBlock  Margin="20,12,0,0" TextWrapping="Wrap" Text="Price:"/>
+                <TextBox x:Name ="tbPrice" Height="23" Margin="59,10,0,0" TextWrapping="Wrap" Width="150"/>
             </StackPanel>
             <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningPrice"
-                       HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
+                       Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
         </StackPanel>
 
-        <StackPanel  Grid.Column="1" Grid.Row="0" >
+        <StackPanel  Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" >
             <Image x:Name ="imgPhoto"  Height="254" Margin="10,10,10,10" Source="{Binding Path=PhotoPath}"/>
-            <Button x:Name ="btnLoadPhoto" Content="Load" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Width="100" Click="BtnLoadPhoto_Click" />
+            <Button x:Name ="btnLoadPhoto" Content="Load" Height="20" Width="100" Click="BtnLoadPhoto_Click" />
         </StackPanel>
-        <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" x:Name ="btnAdd" Content="Edit" HorizontalAlignment="Center"  Width="130" Click="BtnEdit_Click" Margin="0,15,0,15"/>
+        <Button Grid.Column="1" Grid.Row="1"  x:Name ="btnAdd" Content="Edit" 
+                HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="35" Width="130" Click="BtnEdit_Click" Margin="0,15,0,15"/>
     </Grid>
 </Window>

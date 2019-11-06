@@ -46,7 +46,9 @@
             </ListBox.ItemsPanel>
         </ListBox>
 
-        <Button  x:Name ="btnLogout" Content="Log out"  Grid.Row ="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="85" Height="30" Click="BtnLogout_Click"/>
-
+        <GroupBox Grid.Row="2" Grid.Column="1" x:Name ="gbPages" Margin="10,10,110,0" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Height="40" BorderThickness="0"/>
+        <Button Grid.Row="2" Grid.Column="1" x:Name ="btnLogout" Margin="10,10,10,10" Content="Log out" 
+                HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="85" Height="30" Click="BtnLogout_Click"/>
     </Grid>
 </Window>
