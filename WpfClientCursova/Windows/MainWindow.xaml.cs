@@ -54,9 +54,11 @@ namespace WpfClientCursova
             }
             ShowPage();
         }
+
+        #region Pagination
         public void ShowPage(int currentPage = 1)
         {
-            int countDataInPage = 4;
+            int countDataInPage = 6;
 
             // вибираємо товари на конкретній сторінці
             var productsInPage = Products
@@ -196,7 +198,7 @@ namespace WpfClientCursova
         {
             btn.Content = number;
 
-            Brush selectColor = Brushes.DarkCyan;
+            Brush selectColor = Brushes.Green;
             Brush defaultColor = Brushes.White;
 
             btn.Background = (number == currentPage) ? selectColor : defaultColor;
@@ -209,7 +211,9 @@ namespace WpfClientCursova
             int page = int.Parse(btn.Content.ToString());
             ShowPage(page);
         }
+        #endregion
 
+        #region CreateDeleteEdit
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
             AddProductWindow dlg = new AddProductWindow();
@@ -250,7 +254,7 @@ namespace WpfClientCursova
             }
         }
 
-
+        #endregion
 
         private async void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
