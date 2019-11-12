@@ -10,6 +10,10 @@ namespace ServiceDll.Interfaces
         List<ProductModel> GetProducts();
         Task<List<ProductModel>> GetProductsAsync();
 
+        List<ProductModel> GetFilterProducts(List<int> id);
+        Task<List<ProductModel>> GetFilterProductsAsync(List<int> id);
+
+
         Dictionary<string, string> Create(ProductAddModel product);
         Task<Dictionary<string, string>> CreateAsync(ProductAddModel product);
 

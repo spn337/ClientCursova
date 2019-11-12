@@ -19,7 +19,9 @@ namespace WpfClientCursova
     public partial class MainWindow : Window
     {
         public string userEmail;
-        public ObservableCollection<ProductVM> Products = new ObservableCollection<ProductVM>();
+        static List<int> Indexes = new List<int>();
+        private ObservableCollection<ProductVM> Products = new ObservableCollection<ProductVM>();
+        private List<FilterModel> Filters = new List<FilterModel>();
 
         public MainWindow(Dictionary<string, string> responseObj)
         {
@@ -31,9 +33,38 @@ namespace WpfClientCursova
             lblUser.Content += responseObj["FirstName"] + " " + responseObj["LastName"] + "\n";
             lblUser.Content += responseObj["Phone"];
 
+            ShowFilters();
             UpdateDatabase();
         }
-
+        private async void ShowFilters()
+        {
+            Filters.Clear();
+            FilterApiService fService = new FilterApiService();
+            var fList = await fService.GetFiltersAsync();
+            foreach (var item in fList)
+            {
+                FilterModel newFilter = new FilterModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                };
+                foreach (var child in item.Children)
+                {
+                    if (newFilter.Children == null)
+                    {
+                        newFilter.Children = new List<FilterValueModel>();
+                    }
+                    var newChild = new FilterValueModel
+                    {
+                        Id = child.Id,
+                        Name = child.Name
+                    };
+                    newFilter.Children.Add(newChild);
+                }
+                Filters.Add(newFilter);
+            }
+            tvFilters.ItemsSource = Filters;
+        }
         private async void UpdateDatabase()
         {
             Products.Clear();
@@ -50,7 +81,25 @@ namespace WpfClientCursova
                     PhotoPath = $"{hostUrl}images/{item.PhotoName}"
                 };
                 Products.Add(newProduct);
-
+            }
+            ShowPage();
+        }
+        private async void UpdateFilterDatabase()
+        {
+            Products.Clear();
+            ProductApiService service = new ProductApiService();
+            var list = await service.GetFilterProductsAsync(Indexes);
+            foreach (var item in list)
+            {
+                string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
+                ProductVM newProduct = new ProductVM
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Price = item.Price,
+                    PhotoPath = $"{hostUrl}images/{item.PhotoName}"
+                };
+                Products.Add(newProduct);
             }
             ShowPage();
         }
@@ -266,6 +315,24 @@ namespace WpfClientCursova
                 window.Show();
                 this.Close();
             }
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox ch = sender as CheckBox;
+            int id = int.Parse(ch.Tag.ToString());
+            Indexes.Add(id);
+
+            UpdateFilterDatabase();
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox ch = sender as CheckBox;
+            int id = int.Parse(ch.Tag.ToString());
+            Indexes.Remove(id);
+
+            UpdateFilterDatabase();
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ServiceDll.Interfaces;
@@ -188,6 +186,39 @@ namespace ServiceDll.Realization
         public Task<Dictionary<string, string>> EditSaveAsync(ProductEditModel product)
         {
             return Task.Run(() => EditSave(product));
+        }
+
+        public List<ProductModel> GetFilterProducts(List<int> indexes)
+        {
+            string newUrl = _url;
+
+            if (indexes.Count != 0)
+            {
+                string path = "?value=" + indexes[0];
+                for (int i = 1; i < indexes.Count; i++)
+                {
+                    path += "&value=" + indexes[i];
+                }
+                newUrl += @"/GetByFilter/" + path;
+            }
+
+            //Клієнт посилає запити на API
+            WebClient client = new WebClient
+            {
+                Encoding = Encoding.UTF8
+            };
+
+            //витягуємо дані з сервера по URL
+            string data = client.DownloadString(newUrl);
+
+            // перетворюємо string в object за допомогою json
+            var list = JsonConvert.DeserializeObject<List<ProductModel>>(data);
+            return list;
+        }
+
+        public Task<List<ProductModel>> GetFilterProductsAsync(List<int> indexes)
+        {
+            return Task.Run(() => GetFilterProducts(indexes));
         }
     }
 }
