@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace ServiceDll.Models
 {
     public class ProductModel
@@ -13,6 +15,7 @@ namespace ServiceDll.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string PhotoBase64 { get; set; }
+        public int FilterIdType { get; set; }
     }
     public class ProductDeleteModel
     {

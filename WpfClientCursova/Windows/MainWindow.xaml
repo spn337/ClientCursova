@@ -47,7 +47,7 @@
                     <HierarchicalDataTemplate.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox Tag ="{Binding Id}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                <CheckBox TabIndex ="{Binding Id}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                                 <TextBlock Text="{Binding Name}"/>
                             </StackPanel>
                         </DataTemplate>

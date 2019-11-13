@@ -5,37 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClientCursova.Windows"
         mc:Ignorable="d"
-        Title="AddProductWindow" Height="450" Width="800">
+        Title="AddProductWindow" Height="600" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="136*"></ColumnDefinition>
-            <ColumnDefinition Width="185*"></ColumnDefinition>
+            <ColumnDefinition Width="167*"></ColumnDefinition>
+            <ColumnDefinition Width="329*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="305*"></RowDefinition>
-            <RowDefinition Height="64*"></RowDefinition>
+            <RowDefinition Height="499*"></RowDefinition>
+            <RowDefinition Height="70*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0">
-            <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
-                <TextBlock HorizontalAlignment="Left" Margin="20,18,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
-                <TextBox x:Name ="tbName" HorizontalAlignment="Left" Height="35" Margin="50,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+            <StackPanel Orientation="Horizontal" Margin="0,40,0,0" Height="100">
+                <TextBlock HorizontalAlignment="Left" Margin="20,0,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Center"/>
+                <TextBox x:Name ="tbName" HorizontalAlignment="Left"  Margin="50,0,10,0" TextWrapping="Wrap" VerticalAlignment="Stretch" Width="150"/>
             </StackPanel>
             <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningName"
                        HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
-            <StackPanel Orientation="Horizontal"  Margin="0,40,0,0">
+            <StackPanel Orientation="Horizontal"  Height="35">
                 <TextBlock HorizontalAlignment="Left" Margin="20,12,0,0" TextWrapping="Wrap" Text="Price:" VerticalAlignment="Top"/>
-                <TextBox x:Name ="tbPrice" HorizontalAlignment="Left" Height="23" Margin="59,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+                <TextBox x:Name ="tbPrice" HorizontalAlignment="Left" Margin="57,0,0,0" TextWrapping="Wrap" VerticalAlignment="Stretch" Width="150"/>
             </StackPanel>
             <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningPrice"
                        HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
+            <StackPanel Orientation="Horizontal" Height="220">
+                <GroupBox x:Name ="gbTypes" Header="Type:" Margin="20,10,0,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="290"/>
+            </StackPanel>
+            <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningType"
+                       HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
         </StackPanel>
 
-        <StackPanel  Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"  >
-            <Image x:Name ="imgPhoto"  Height="254" Margin="10,10,10,10"/>
-            <Button x:Name ="btnLoadPhoto" Content="Load" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Width="100" Click="BtnLoadPhoto_Click" />
+        <StackPanel  Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"  >
+            <Image x:Name ="imgPhoto"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Height="427" Margin="10"/>
+            <Button x:Name ="btnLoadPhoto" VerticalAlignment="Bottom" Content="Load" Height="20" Width="100" Click="BtnLoadPhoto_Click" />
         </StackPanel>
-        <Button Grid.Column="1" Grid.Row="1" x:Name ="btnAdd" Content="Add" 
-                HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="35" Width="125" Click="BtnAdd_Click" Margin="0,0,0,15"/>
+        <Button Grid.Row="1" Grid.ColumnSpan="2" x:Name ="btnAdd" Content="Add" 
+                HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="124" Click="BtnAdd_Click" />
     </Grid>
 </Window>

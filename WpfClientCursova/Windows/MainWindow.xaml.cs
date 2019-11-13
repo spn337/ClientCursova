@@ -320,7 +320,7 @@ namespace WpfClientCursova
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox ch = sender as CheckBox;
-            int id = int.Parse(ch.Tag.ToString());
+            int id = ch.TabIndex;
             Indexes.Add(id);
 
             UpdateFilterDatabase();
@@ -329,7 +329,7 @@ namespace WpfClientCursova
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             CheckBox ch = sender as CheckBox;
-            int id = int.Parse(ch.Tag.ToString());
+            int id = ch.TabIndex;
             Indexes.Remove(id);
 
             UpdateFilterDatabase();
