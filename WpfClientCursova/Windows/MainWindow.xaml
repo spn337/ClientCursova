@@ -28,8 +28,8 @@
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="17*"></ColumnDefinition>
-            <ColumnDefinition Width="66*"></ColumnDefinition>
+            <ColumnDefinition Width="229*"></ColumnDefinition>
+            <ColumnDefinition Width="767*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="0,0,135,10"  VerticalAlignment="Bottom"  Grid.Row ="0" Grid.Column="1" Height="30">
@@ -40,21 +40,31 @@
 
         <Label x:Name ="lblUser" Grid.Row ="0" Grid.Column="1" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="60" Width="130"/>
 
-        <TreeView x:Name ="tvFilters" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="251" Width="194" ItemsSource="{Binding Filters}">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
-                    <TextBlock Text="{Binding Name}" />
-                    <HierarchicalDataTemplate.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox TabIndex ="{Binding Id}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                <TextBlock Text="{Binding Name}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
+        <StackPanel Grid.Row="1" Grid.Column ="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10" >
+            <TreeView x:Name ="tvCategories" ItemsSource="{Binding categoryList}" Height="180">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
+                        <TextBlock Text="{Binding Name}"/>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            
+            <TreeView x:Name ="tvFilters" ItemsSource="{Binding filterList}" Height="180">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Name}" />
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox TabIndex ="{Binding Id}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </StackPanel>
 
         <ListBox x:Name ="lbxProducts" Grid.Row="1" Grid.Column="1" Margin="10,10,10,10"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                  ItemTemplate="{StaticResource listTemplate}"
@@ -66,9 +76,9 @@
             </ListBox.ItemsPanel>
         </ListBox>
 
-        <GroupBox Grid.Row="2" Grid.Column="1" x:Name ="gbPages" Margin="10,10,110,0" 
+        <GroupBox Grid.Row="2" Grid.Column="1" x:Name ="gbPages" Margin="10,0,110,0" 
                 HorizontalAlignment="Stretch" VerticalAlignment="Bottom"  Height="40" BorderThickness="0"/>
-        <Button Grid.Row="2" Grid.Column="1" x:Name ="btnLogout" Margin="10,10,10,10" Content="Log out" 
+        <Button Grid.Row="2" Grid.Column="1" x:Name ="btnLogout" Margin="0,0,10,10" Content="Log out" 
                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="85" Height="30" Click="BtnLogout_Click"/>
     </Grid>
 </Window>

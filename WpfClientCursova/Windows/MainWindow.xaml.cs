@@ -20,8 +20,8 @@ namespace WpfClientCursova
     {
         public string userEmail;
         static List<int> Indexes = new List<int>();
+
         private ObservableCollection<ProductVM> Products = new ObservableCollection<ProductVM>();
-        private List<FilterModel> Filters = new List<FilterModel>();
 
         public MainWindow(Dictionary<string, string> responseObj)
         {
@@ -34,36 +34,21 @@ namespace WpfClientCursova
             lblUser.Content += responseObj["Phone"];
 
             ShowFilters();
+            ShowCategories();
             UpdateDatabase();
+
+        }
+        private async void ShowCategories()
+        {
+            CategoryApiService cService = new CategoryApiService();
+            var categoryList = await cService.GetCategoriesAsync();
+            tvCategories.ItemsSource = categoryList;
         }
         private async void ShowFilters()
         {
-            Filters.Clear();
             FilterApiService fService = new FilterApiService();
-            var fList = await fService.GetFiltersAsync();
-            foreach (var item in fList)
-            {
-                FilterModel newFilter = new FilterModel
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                };
-                foreach (var child in item.Children)
-                {
-                    if (newFilter.Children == null)
-                    {
-                        newFilter.Children = new List<FilterValueModel>();
-                    }
-                    var newChild = new FilterValueModel
-                    {
-                        Id = child.Id,
-                        Name = child.Name
-                    };
-                    newFilter.Children.Add(newChild);
-                }
-                Filters.Add(newFilter);
-            }
-            tvFilters.ItemsSource = Filters;
+            var filterList = await fService.GetFiltersAsync();          
+            tvFilters.ItemsSource = filterList;
         }
         private async void UpdateDatabase()
         {

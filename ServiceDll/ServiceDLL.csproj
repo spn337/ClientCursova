@@ -67,14 +67,17 @@
   <ItemGroup>
     <Compile Include="Helpers\ImageConverter.cs" />
     <Compile Include="Interfaces\IAccountService.cs" />
+    <Compile Include="Interfaces\ICategoryService.cs" />
     <Compile Include="Interfaces\IFilterService.cs" />
     <Compile Include="Interfaces\IProductService.cs" />
     <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Realization\AccountApiService.cs" />
+    <Compile Include="Realization\CategoryApiService.cs" />
     <Compile Include="Realization\FilterApiService.cs" />
     <Compile Include="Realization\ProductApiService.cs" />
   </ItemGroup>
