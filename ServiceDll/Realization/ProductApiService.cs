@@ -13,14 +13,29 @@ namespace ServiceDll.Realization
      
     public class ProductApiService : IProductService
     {
-        private readonly string _url = "https://localhost:44329/api/product";
-        public List<ProductModel> GetProducts()
+        private string _url = "https://localhost:44329/api/product";
+        public List<ProductModel> GetProducts(int categoryId, List<int> filtersId)
         {
             //Клієнт посилає запити на API
             WebClient client = new WebClient
             {
                 Encoding = Encoding.UTF8
             };
+
+            if (categoryId != -1)
+            {
+                string path = "?value=" + categoryId;
+                _url += @"/GetByCategory/" + path;
+            }
+            else if (filtersId.Count != 0)
+            {
+                string path = "?value=" + filtersId[0];
+                for (int i = 1; i < filtersId.Count; i++)
+                {
+                    path += "&value=" + filtersId[i];
+                }
+                _url += @"/GetByFilter/" + path;
+            }
 
             //витягуємо дані з сервера по URL
             string data = client.DownloadString(_url);
@@ -29,9 +44,9 @@ namespace ServiceDll.Realization
             var list = JsonConvert.DeserializeObject<List<ProductModel>>(data);
             return list;
         }
-        public Task<List<ProductModel>> GetProductsAsync()
+        public Task<List<ProductModel>> GetProductsAsync(int categoryId, List<int> filtersId)
         {
-            return Task.Run(() => GetProducts());
+            return Task.Run(() => GetProducts(categoryId, filtersId));
         }
 
 
@@ -186,39 +201,6 @@ namespace ServiceDll.Realization
         public Task<Dictionary<string, string>> EditSaveAsync(ProductEditModel product)
         {
             return Task.Run(() => EditSave(product));
-        }
-
-        public List<ProductModel> GetFilterProducts(List<int> indexes)
-        {
-            string newUrl = _url;
-
-            if (indexes.Count != 0)
-            {
-                string path = "?value=" + indexes[0];
-                for (int i = 1; i < indexes.Count; i++)
-                {
-                    path += "&value=" + indexes[i];
-                }
-                newUrl += @"/GetByFilter/" + path;
-            }
-
-            //Клієнт посилає запити на API
-            WebClient client = new WebClient
-            {
-                Encoding = Encoding.UTF8
-            };
-
-            //витягуємо дані з сервера по URL
-            string data = client.DownloadString(newUrl);
-
-            // перетворюємо string в object за допомогою json
-            var list = JsonConvert.DeserializeObject<List<ProductModel>>(data);
-            return list;
-        }
-
-        public Task<List<ProductModel>> GetFilterProductsAsync(List<int> indexes)
-        {
-            return Task.Run(() => GetFilterProducts(indexes));
         }
     }
 }

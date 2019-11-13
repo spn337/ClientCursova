@@ -41,15 +41,16 @@
         <Label x:Name ="lblUser" Grid.Row ="0" Grid.Column="1" HorizontalAlignment="Right"  VerticalAlignment="Top" Height="60" Width="130"/>
 
         <StackPanel Grid.Row="1" Grid.Column ="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10" >
-            <TreeView x:Name ="tvCategories" ItemsSource="{Binding categoryList}" Height="180">
+            <Button x:Name ="btnReset" Content ="Всі продукти" HorizontalAlignment="Left" Width="120" Height="20" VerticalAlignment="Top" Click="BtnReset_Click"/>
+            <TreeView x:Name ="tvCategories" ItemsSource="{Binding categoryList}" Height="120">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
-                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock x:Name ="tbCategory" Tag ="{Binding Id}" Text="{Binding Name}" MouseDown="TbCategory_MouseDown"/>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            
-            <TreeView x:Name ="tvFilters" ItemsSource="{Binding filterList}" Height="180">
+
+            <TreeView x:Name ="tvFilters" ItemsSource="{Binding filterList}" Height="240">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <TextBlock Text="{Binding Name}" />

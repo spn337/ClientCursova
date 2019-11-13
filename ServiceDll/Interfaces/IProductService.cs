@@ -7,11 +7,8 @@ namespace ServiceDll.Interfaces
     public interface IProductService
     {
         //Task вертає асинхронну задачу, яка працює у вторинному потоці
-        List<ProductModel> GetProducts();
-        Task<List<ProductModel>> GetProductsAsync();
-
-        List<ProductModel> GetFilterProducts(List<int> id);
-        Task<List<ProductModel>> GetFilterProductsAsync(List<int> id);
+        List<ProductModel> GetProducts(int categoryId, List<int> filtersId);
+        Task<List<ProductModel>> GetProductsAsync(int categoryId, List<int> filtersId);
 
 
         Dictionary<string, string> Create(ProductAddModel product);

@@ -19,7 +19,8 @@ namespace WpfClientCursova
     public partial class MainWindow : Window
     {
         public string userEmail;
-        static List<int> Indexes = new List<int>();
+        static List<int> IndexesFilters = new List<int>();
+        static int indexCategory = -1;
 
         private ObservableCollection<ProductVM> Products = new ObservableCollection<ProductVM>();
 
@@ -47,47 +48,34 @@ namespace WpfClientCursova
         private async void ShowFilters()
         {
             FilterApiService fService = new FilterApiService();
-            var filterList = await fService.GetFiltersAsync();          
+            var filterList = await fService.GetFiltersAsync();
             tvFilters.ItemsSource = filterList;
         }
         private async void UpdateDatabase()
         {
-            Products.Clear();
             ProductApiService service = new ProductApiService();
-            var list = await service.GetProductsAsync();
-            foreach (var item in list)
+            var list = await service.GetProductsAsync(indexCategory, IndexesFilters);
+
+            if (list.Count != 0)
             {
-                string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
-                ProductVM newProduct = new ProductVM
+                Products.Clear();
+
+                foreach (var item in list)
                 {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Price = item.Price,
-                    PhotoPath = $"{hostUrl}images/{item.PhotoName}"
-                };
-                Products.Add(newProduct);
+                    string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
+                    ProductVM newProduct = new ProductVM
+                    {
+                        Id = item.Id,
+                        Name = item.Name,
+                        Price = item.Price,
+                        PhotoPath = $"{hostUrl}images/{item.PhotoName}"
+                    };
+                    Products.Add(newProduct);
+                }
+                ShowPage();
             }
-            ShowPage();
         }
-        private async void UpdateFilterDatabase()
-        {
-            Products.Clear();
-            ProductApiService service = new ProductApiService();
-            var list = await service.GetFilterProductsAsync(Indexes);
-            foreach (var item in list)
-            {
-                string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
-                ProductVM newProduct = new ProductVM
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Price = item.Price,
-                    PhotoPath = $"{hostUrl}images/{item.PhotoName}"
-                };
-                Products.Add(newProduct);
-            }
-            ShowPage();
-        }
+
 
         #region Pagination
         public void ShowPage(int currentPage = 1)
@@ -306,18 +294,33 @@ namespace WpfClientCursova
         {
             CheckBox ch = sender as CheckBox;
             int id = ch.TabIndex;
-            Indexes.Add(id);
+            IndexesFilters.Add(id);
 
-            UpdateFilterDatabase();
+            UpdateDatabase();
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             CheckBox ch = sender as CheckBox;
             int id = ch.TabIndex;
-            Indexes.Remove(id);
+            IndexesFilters.Remove(id);
 
-            UpdateFilterDatabase();
+            UpdateDatabase();
+        }
+
+        private void TbCategory_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            TextBlock t = sender as TextBlock;
+            indexCategory = int.Parse(t.Tag.ToString());
+
+            UpdateDatabase();
+        }
+
+        private void BtnReset_Click(object sender, RoutedEventArgs e)
+        {
+            indexCategory = -1;
+
+            UpdateDatabase();
         }
     }
 }
