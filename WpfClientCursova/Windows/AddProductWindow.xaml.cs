@@ -4,11 +4,9 @@ using ServiceDll.Models;
 using ServiceDll.Realization;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-//using System.Windows.Media.Imaging;
 
 namespace WpfClientCursova.Windows
 {
@@ -17,15 +15,52 @@ namespace WpfClientCursova.Windows
     /// </summary>
     public partial class AddProductWindow : Window
     {
+        StackPanel spCategories = new StackPanel();
         string base64Image = "";
         int filtersIdType = -1;
+        int categoryIdType = -1;
+
 
         public AddProductWindow()
         {
             InitializeComponent();
-
+            ShowCategories();
             ShowTypes();
         }
+        private void ShowCategories()
+        {
+            CategoryApiService cService = new CategoryApiService();
+            var cList = cService.GetCategories();
+
+            CreateRbtCategories(cList);
+            gbCategory.Content = spCategories;
+        }
+
+        private void CreateRbtCategories(List<CategoryModel> cList)
+        {
+            foreach (var item in cList)
+            {
+                if (item.Children.Count >  0)
+                {
+                    CreateRbtCategories(item.Children);
+                }
+                else
+                {
+                    //Radiobuttons
+                    RadioButton rbtn = new RadioButton
+                    {
+                        TabIndex = item.Id,
+                        Content = item.Name,
+                        Margin = new Thickness(90, 5, 5, 5)
+                    };
+                    rbtn.Checked += rbtCategory_Checked;
+
+                    //Add radiobutton to stackpanel
+                    spCategories.Children.Add(rbtn);
+                }
+            }
+        }
+
         private void ShowTypes()
         {
             //StackPanel
@@ -47,7 +82,7 @@ namespace WpfClientCursova.Windows
                             Content = fValue.Name,
                             Margin = new Thickness(90, 5, 5, 5)
                         };
-                        rbtn.Checked += RadioButton_Checked;
+                        rbtn.Checked += rbtFilter_Checked;
 
                         //Add radiobutton to stackpanel
                         sp.Children.Add(rbtn);
@@ -57,10 +92,15 @@ namespace WpfClientCursova.Windows
             gbTypes.Content = sp;
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        private void rbtFilter_Checked(object sender, RoutedEventArgs e)
         {
             var rbtn = sender as RadioButton;
             filtersIdType = rbtn.TabIndex;
+        }
+        private void rbtCategory_Checked(object sender, RoutedEventArgs e)
+        {
+            var rbtn = sender as RadioButton;
+            categoryIdType = rbtn.TabIndex;
         }
         private async void BtnLoadPhoto_Click(object sender, RoutedEventArgs e)
         {
@@ -126,7 +166,8 @@ namespace WpfClientCursova.Windows
                 Name = tbName.Text,
                 Price = Convert.ToDecimal(tbPrice.Text),
                 PhotoBase64 = base64Image,
-                FilterIdType = filtersIdType
+                FilterIdType = filtersIdType,
+                CategoryId = categoryIdType
             });
 
             logo.Close();

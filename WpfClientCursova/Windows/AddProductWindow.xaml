@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfClientCursova.Windows"
         mc:Ignorable="d"
-        Title="AddProductWindow" Height="600" Width="1000">
+        Title="AddProductWindow" Height="700" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="167*"></ColumnDefinition>
@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="0" Grid.Row="0">
-            <StackPanel Orientation="Horizontal" Margin="0,40,0,0" Height="100">
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0" Height="77">
                 <TextBlock HorizontalAlignment="Left" Margin="20,0,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Center"/>
                 <TextBox x:Name ="tbName" HorizontalAlignment="Left"  Margin="50,0,10,0" TextWrapping="Wrap" VerticalAlignment="Stretch" Width="150"/>
             </StackPanel>
@@ -29,9 +29,11 @@
             </StackPanel>
             <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningPrice"
                        HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
-            <StackPanel Orientation="Horizontal" Height="220">
-                <GroupBox x:Name ="gbTypes" Header="Type:" Margin="20,10,0,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="290"/>
-            </StackPanel>
+
+            <GroupBox x:Name ="gbCategory" Header="Category:" Margin="20,0,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="247"/>
+
+            <GroupBox x:Name ="gbTypes" Header="Type:" Margin="20,0,10,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="75"/>
+
             <TextBlock Grid.Column="0"  Grid.Row="0" x:Name="tbWarningType"
                        HorizontalAlignment="Left" Margin="30,0,0,0" Text="" Foreground="Red" Height="32" Width="296"/>
         </StackPanel>

@@ -42,7 +42,7 @@
 
         <StackPanel Grid.Row="1" Grid.Column ="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,10,10,10" >
             <Button x:Name ="btnReset" Content ="Всі продукти" HorizontalAlignment="Left" Width="120" Height="20" VerticalAlignment="Top" Click="BtnReset_Click"/>
-            <TreeView x:Name ="tvCategories" ItemsSource="{Binding categoryList}" Height="120">
+            <TreeView x:Name ="tvCategories" ItemsSource="{Binding categoryList}" Height="210">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
                         <TextBlock x:Name ="tbCategory" Tag ="{Binding Id}" Text="{Binding Name}" MouseDown="TbCategory_MouseDown"/>
@@ -50,7 +50,7 @@
                 </TreeView.ItemTemplate>
             </TreeView>
 
-            <TreeView x:Name ="tvFilters" ItemsSource="{Binding filterList}" Height="240">
+            <TreeView x:Name ="tvFilters" ItemsSource="{Binding filterList}" Height="150">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <TextBlock Text="{Binding Name}" />

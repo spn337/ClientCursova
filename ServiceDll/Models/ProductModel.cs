@@ -16,6 +16,7 @@ namespace ServiceDll.Models
         public decimal Price { get; set; }
         public string PhotoBase64 { get; set; }
         public int FilterIdType { get; set; }
+        public int CategoryId { get; set; }
     }
     public class ProductDeleteModel
     {
@@ -28,5 +29,7 @@ namespace ServiceDll.Models
         public decimal Price { get; set; }
         public string PhotoName { get; set; }
         public string PhotoBase64 { get; set; }
+        public int FilterIdType { get; set; }
+        public int CategoryId { get; set; }
     }
 }

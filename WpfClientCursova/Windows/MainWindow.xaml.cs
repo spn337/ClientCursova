@@ -56,24 +56,22 @@ namespace WpfClientCursova
             ProductApiService service = new ProductApiService();
             var list = await service.GetProductsAsync(indexCategory, IndexesFilters);
 
-            if (list.Count != 0)
-            {
-                Products.Clear();
+            Products.Clear();
 
-                foreach (var item in list)
+            foreach (var item in list)
+            {
+                string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
+                ProductVM newProduct = new ProductVM
                 {
-                    string hostUrl = ConfigurationManager.AppSettings["HostUrl"];
-                    ProductVM newProduct = new ProductVM
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Price = item.Price,
-                        PhotoPath = $"{hostUrl}images/{item.PhotoName}"
-                    };
-                    Products.Add(newProduct);
-                }
-                ShowPage();
+                    Id = item.Id,
+                    Name = item.Name,
+                    Price = item.Price,
+                    PhotoPath = $"{hostUrl}images/{item.PhotoName}"
+                };
+                Products.Add(newProduct);
             }
+            ShowPage();
+
         }
 
 
@@ -104,11 +102,12 @@ namespace WpfClientCursova
         public void ShowPaginationPanel(int countButtons, int currentPage)
         {
             int lastPage = countButtons;
-            int step = -4;
+            int step = -1;
+            int maxButtons = 10;
 
             //cut max counts of buttons
-            if (countButtons > 15)
-                countButtons = 15;
+            if (countButtons > maxButtons)
+                countButtons = maxButtons;
 
             //create container
             StackPanel sp = new StackPanel();
@@ -120,14 +119,14 @@ namespace WpfClientCursova
             {
                 Button dynamicButton = CreateDynamicButton();
 
-                if (countButtons < 7)
+                if (lastPage <= maxButtons)
                 {
                     SetButtonAsPage(dynamicButton, i + 1, currentPage);
                 }
                 else
                 {
                     ///////////////////////////////////////////////////////////
-                    //if current page <= 1....7(in the left)
+                    //if current page is in the left
                     ///////////////////////////////////////////////////////////
                     if (currentPage <= countButtons / 2)
                     {
@@ -144,9 +143,9 @@ namespace WpfClientCursova
                         }
                     }
                     ///////////////////////////////////////////////////////////
-                    //if current page >= 8...11(in the middle)
+                    //if current page is in the middle
                     ///////////////////////////////////////////////////////////
-                    else if (currentPage > countButtons / 2 && currentPage <= lastPage - countButtons / 2)
+                    else if (currentPage > countButtons / 2 && currentPage <= lastPage - countButtons / 2 + 1)
                     {
                         //set(...) (is between numbers in the middle)
 
